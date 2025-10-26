@@ -1,0 +1,70 @@
+.nineSliceContainer {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-rows: auto 1fr auto;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.topLeft {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.top {
+  grid-column: 2;
+  grid-row: 1;
+  background-repeat: repeat-x;
+}
+
+.topRight {
+  grid-column: 3;
+  grid-row: 1;
+}
+
+.left {
+  grid-column: 1;
+  grid-row: 2;
+  background-repeat: repeat-y;
+}
+
+.center {
+  grid-column: 2;
+  grid-row: 2;
+  background-repeat: repeat;
+  position: relative;
+}
+
+.right {
+  grid-column: 3;
+  grid-row: 2;
+  background-repeat: repeat-y;
+}
+
+.bottomLeft {
+  grid-column: 1;
+  grid-row: 3;
+}
+
+.bottom {
+  grid-column: 2;
+  grid-row: 3;
+  background-repeat: repeat-x;
+}
+
+.bottomRight {
+  grid-column: 3;
+  grid-row: 3;
+}
+
+.content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 1;
+}
