@@ -30,7 +30,7 @@
     "@vitejs/plugin-react": "^4.7.0",
     "dotenv": "^16.6.1",
     "express": "^5.1.0",
-    "glob": "^10.4.5",
+    "glob": "^11.0.3",
     "tsx": "^4.20.6",
     "typescript": "^5.9.3",
     "vite": "^6.4.0",
