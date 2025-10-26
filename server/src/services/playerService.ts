@@ -38,7 +38,7 @@ export class PlayerService {
       const player = await pb.collection(COLLECTION_NAME).getOne(id);
       return player as unknown as Player;
     } catch (error) {
-      console.error(`Error fetching player ${id}:`, error);
+      console.error('Error fetching player by id:', error);
       throw new Error('Player not found');
     }
   }
@@ -80,7 +80,7 @@ export class PlayerService {
       const player = await pb.collection(COLLECTION_NAME).update(id, updateData);
       return player as unknown as Player;
     } catch (error) {
-      console.error(`Error updating player ${id}:`, error);
+      console.error('Error updating player:', error);
       throw new Error('Failed to update player');
     }
   }
@@ -93,7 +93,7 @@ export class PlayerService {
       await pb.collection(COLLECTION_NAME).delete(id);
       return true;
     } catch (error) {
-      console.error(`Error deleting player ${id}:`, error);
+      console.error('Error deleting player:', error);
       throw new Error('Failed to delete player');
     }
   }
@@ -103,13 +103,19 @@ export class PlayerService {
    */
   async getPlayersByStatus(status: 'online' | 'offline' | 'away'): Promise<Player[]> {
     try {
+      // Validate status to prevent injection
+      const validStatuses = ['online', 'offline', 'away'];
+      if (!validStatuses.includes(status)) {
+        throw new Error('Invalid status value');
+      }
+      
       const result = await pb.collection(COLLECTION_NAME).getFullList({
         filter: `status = "${status}"`,
         sort: '-lastSeen',
       });
       return result as unknown as Player[];
     } catch (error) {
-      console.error(`Error fetching players with status ${status}:`, error);
+      console.error('Error fetching players with status:', status);
       throw new Error('Failed to fetch players by status');
     }
   }
@@ -119,13 +125,16 @@ export class PlayerService {
    */
   async searchPlayers(query: string): Promise<Player[]> {
     try {
+      // Sanitize query to prevent injection - escape quotes
+      const sanitizedQuery = query.replace(/["'\\]/g, '\\$&');
+      
       const result = await pb.collection(COLLECTION_NAME).getFullList({
-        filter: `username ~ "${query}"`,
+        filter: `username ~ "${sanitizedQuery}"`,
         sort: '-created',
       });
       return result as unknown as Player[];
     } catch (error) {
-      console.error('Error searching players:', error);
+      console.error('Error searching players');
       throw new Error('Failed to search players');
     }
   }
