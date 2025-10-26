@@ -1,0 +1,11 @@
+node_modules
+dist
+.env
+*.log
+.DS_Store
+pb_data
+pb_migrations/*.snap.db
+.git
+.gitignore
+README.md
+package-lock.json

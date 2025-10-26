@@ -11,20 +11,57 @@ Backend server for Path of Heroes multiplayer game. Built with Express.js, TypeS
 
 ## 📋 Prerequisites
 
+### With Docker (Recommended)
+- Docker
+- Docker Compose
+
+### Without Docker
 - Node.js (v18 or higher)
 - npm or yarn
 - PocketBase (downloaded separately or installed globally)
 
 ## 🚀 Quick Start
 
-### 1. Install Dependencies
+### Option A: Using Docker (Recommended)
+
+The easiest way to run the backend is using Docker Compose, which will automatically set up both the backend server and PocketBase:
+
+```bash
+cd server
+docker-compose up -d
+```
+
+This will:
+- Start PocketBase on `http://localhost:8090`
+- Start the backend API on `http://localhost:3000`
+- Automatically create the players collection from migrations
+
+To view logs:
+```bash
+docker-compose logs -f
+```
+
+To stop the services:
+```bash
+docker-compose down
+```
+
+#### First Time Setup with Docker
+
+1. After starting the containers, open PocketBase Admin UI at `http://localhost:8090/_/`
+2. Create an admin account
+3. The players collection will be created automatically from the migration file
+
+### Option B: Manual Setup
+
+#### 1. Install Dependencies
 
 ```bash
 cd server
 npm install
 ```
 
-### 2. Setup Environment Variables
+#### 2. Setup Environment Variables
 
 Copy the example environment file:
 
@@ -40,9 +77,9 @@ POCKETBASE_URL=http://127.0.0.1:8090
 NODE_ENV=development
 ```
 
-### 3. Setup PocketBase
+#### 3. Setup PocketBase
 
-#### Option A: Download PocketBase Binary
+**Option 1: Download PocketBase Binary**
 
 1. Download PocketBase from [https://pocketbase.io/docs/](https://pocketbase.io/docs/)
 2. Extract the binary to the `server` directory
@@ -52,13 +89,13 @@ NODE_ENV=development
 ./pocketbase serve --http=127.0.0.1:8090
 ```
 
-#### Option B: Use npm script (if PocketBase is in PATH)
+**Option 2: Use npm script (if PocketBase is in PATH)**
 
 ```bash
 npm run pocketbase
 ```
 
-### 4. Create Players Collection in PocketBase
+#### 4. Create Players Collection in PocketBase
 
 The project includes a migration file that will automatically create the players collection when PocketBase starts. The migration is located in `pb_migrations/` directory.
 
@@ -80,7 +117,7 @@ Alternatively, you can manually create the collection:
 
 5. Save the collection
 
-### 5. Start the Development Server
+#### 5. Start the Development Server
 
 ```bash
 npm run dev
@@ -154,6 +191,31 @@ DELETE /api/players/:id
 
 ## 🔧 Development Scripts
 
+### Docker Commands
+
+```bash
+# Start all services (backend + PocketBase)
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# View logs for specific service
+docker-compose logs -f backend
+docker-compose logs -f pocketbase
+
+# Stop all services
+docker-compose down
+
+# Rebuild and restart services
+docker-compose up -d --build
+
+# Remove all containers and volumes
+docker-compose down -v
+```
+
+### NPM Commands (for manual setup)
+
 ```bash
 # Start development server with hot reload
 npm run dev
@@ -182,6 +244,10 @@ server/
 │   │   └── errorHandler.ts   # Error handling middleware
 │   └── types/
 │       └── player.ts         # TypeScript types
+├── pb_migrations/            # PocketBase schema migrations
+├── Dockerfile                # Docker image configuration
+├── docker-compose.yml        # Docker Compose orchestration
+├── .dockerignore             # Docker ignore patterns
 ├── package.json
 ├── tsconfig.json
 ├── .env.example
