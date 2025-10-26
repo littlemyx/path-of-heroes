@@ -1,0 +1,5 @@
+.nineslice {
+  background-color: transparent;
+  border: var(--bg-padding-px) solid orange;
+  border-image: var(--bg-img) var(--bg-padding) fill round;
+}
