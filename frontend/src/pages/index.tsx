@@ -5,7 +5,7 @@ import reactLogo from "~/assets/react.svg";
 const handleButtonClick = () => {
   return fetch("/api/example", {
     method: "POST",
-    body: JSON.stringify({ time: Date.now() }),
+    body: JSON.stringify({ time: Date.now() })
   });
 };
 
@@ -22,7 +22,7 @@ const Home: React.FC = () => {
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
       </div>
-      <h1>Vite + React</h1>
+      <h1>Vite + React1111</h1>
       <div className="list">
         <p>
           Visit <Link to="/ssr">/my-dynamic-url</Link> to see the
@@ -31,7 +31,7 @@ const Home: React.FC = () => {
         <p>
           <button
             onClick={() =>
-              handleButtonClick().then(async (res) => {
+              handleButtonClick().then(async res => {
                 const data = await res.json();
                 setPayload(data);
               })

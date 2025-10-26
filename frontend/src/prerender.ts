@@ -4,4 +4,4 @@
 // Check import.meta.glob provided by Vite to scan folders dynamically
 // and build the routes to be prerendered.
 
-export default ["/", "/prerender"];
+export default ["/", "/prerender", "/arena"];

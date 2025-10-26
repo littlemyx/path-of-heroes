@@ -16,7 +16,7 @@ export default function Home() {
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
       </div>
-      <h1>Vite + React</h1>
+      <h1>Vite + Reactasdfasfasd</h1>
       <div className="list">
         <p>This page is prerendered.</p>
         <p>
