@@ -1,6 +1,9 @@
 import { PropsWithChildren } from "react";
 
+import { NineSlice } from "../NineSlice";
 import { Controlls } from "../Controlls";
+
+import scrollPng from "~/assets/header_pergament_276.png";
 
 import css from "./Lyaout.module.css";
 
@@ -12,7 +15,9 @@ export const Layout = ({ children, title }: PropsWithChildren<LayoutProps>) => {
   return (
     <div className={css.wrapper}>
       <header>
-        <h1>{title}</h1>
+        <NineSlice bgImage={scrollPng} bgPadding={92}>
+          <div>{title}</div>
+        </NineSlice>
       </header>
       <main className={css.main}>{children}</main>
       <footer>
