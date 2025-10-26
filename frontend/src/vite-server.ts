@@ -24,6 +24,7 @@ async function createServer() {
   // 'custom', disabling Vite's own HTML serving logic so parent server
   // can take control
   const vite = await createViteServer({
+    configFile: path.resolve(__dirname, "../../vite.config.ts"),
     server: { middlewareMode: true },
     appType: "custom",
   });
@@ -50,7 +51,7 @@ async function createServer() {
       // //    from @vitejs/plugin-react
       const template: string = await vite.transformIndexHtml(
         req.originalUrl,
-        fs.readFileSync(path.resolve(__dirname, "..", "index.html"), "utf-8")
+        fs.readFileSync(path.resolve(__dirname, "../index.html"), "utf-8")
       );
 
       // 2. Load the server entry. vite.ssrLoadModule automatically transforms
@@ -85,10 +86,9 @@ async function createServer() {
 }
 
 async function generateStaticPages() {
-  // Create Vite server to load the routes files
+  // Create Vite server to load the routes files with config
   const vite = await createViteServer({
-    server: { middlewareMode: true },
-    appType: "custom",
+    configFile: path.resolve(__dirname, "../../vite.config.ts"),
   });
 
   const { default: routesToPrerender } = (await vite.ssrLoadModule(
@@ -97,7 +97,7 @@ async function generateStaticPages() {
 
   const { render } = await vite.ssrLoadModule("./src/entry-server");
 
-  const dist = path.join(path.dirname(__dirname), ".stormkit/public");
+  const dist = path.join(path.dirname(path.dirname(__dirname)), ".stormkit/public");
 
   if (!fs.existsSync(dist)) {
     throw new Error(

@@ -8,14 +8,14 @@ dotenv.config();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const files = glob
-  .sync("src/api/**/*.ts")
+  .sync("frontend/src/api/**/*.ts")
   // Filter out private files
   .filter((file) => {
     return file.indexOf("_") !== 0 && file.indexOf("/_") === -1;
   })
   .map((file: string) => ({
     entry: `./${file}`,
-    distFileName: file.replace("src/api/", "").replace(".ts", ""),
+    distFileName: file.replace("frontend/src/api/", "").replace(".ts", ""),
   }));
 
 (async () => {
@@ -26,7 +26,7 @@ const files = glob
         alias: [
           {
             find: /^~/,
-            replacement: path.resolve(__dirname, "src"),
+            replacement: path.resolve(__dirname, "frontend/src"),
           },
         ],
         extensions: [".ts", ".tsx"],
