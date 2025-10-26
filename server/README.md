@@ -71,8 +71,8 @@ Alternatively, you can manually create the collection:
 
 | Field Name | Type   | Required | Options                    |
 |------------|--------|----------|----------------------------|
-| username   | Text   | Yes      | Min: 3, Max: 50           |
-| email      | Email  | Yes      | -                          |
+| username   | Text   | Yes      | Min: 3, Max: 50, Unique   |
+| email      | Email  | Yes      | Unique                     |
 | level      | Number | No       | Min: 1, Default: 1        |
 | experience | Number | No       | Min: 0, Default: 0        |
 | status     | Select | No       | Values: online, offline, away |

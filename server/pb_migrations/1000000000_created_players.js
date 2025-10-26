@@ -15,7 +15,7 @@ migrate((db) => {
         "type": "text",
         "required": true,
         "presentable": false,
-        "unique": false,
+        "unique": true,
         "options": {
           "min": 3,
           "max": 50,
@@ -29,7 +29,7 @@ migrate((db) => {
         "type": "email",
         "required": true,
         "presentable": false,
-        "unique": false,
+        "unique": true,
         "options": {
           "exceptDomains": [],
           "onlyDomains": []
