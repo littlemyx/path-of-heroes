@@ -12,13 +12,15 @@
     "url": "https://www.stormkit.io"
   },
   "scripts": {
-    "dev": "tsx ./src/vite-server.ts",
+    "dev": "tsx ./frontend/src/vite-server.ts",
     "build": "npm run build:spa && npm run build:ssr && npm run build:ssg && npm run build:api",
     "build:spa": "vite build",
-    "build:ssg": "SSG=true tsx ./src/vite-server.ts",
+    "build:ssg": "SSG=true tsx ./frontend/src/vite-server.ts",
     "build:ssr": "vite build -c vite.config.ssr.ts",
     "build:api": "rm -rf .stormkit/api && tsx vite.config.api.ts",
-    "test": "jest"
+    "test": "jest",
+    "server": "node server/index.js",
+    "server:dev": "node --watch server/index.js"
   },
   "devDependencies": {
     "@stormkit/serverless": "^2.7.4",

@@ -12,11 +12,12 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  root: "frontend",
   resolve: {
     alias: [
       {
         find: /^~/,
-        replacement: path.resolve(__dirname, "src"),
+        replacement: path.resolve(__dirname, "frontend/src"),
       },
     ],
     extensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json"],
@@ -26,9 +27,9 @@ export default defineConfig({
     minify: false,
     rollupOptions: {
       preserveEntrySignatures: "strict",
-      input: { server: "src/entry-server.tsx" },
+      input: { server: path.resolve(__dirname, "frontend/src/entry-server.tsx") },
       output: {
-        dir: ".stormkit/server",
+        dir: "../.stormkit/server",
         format: "esm",
         entryFileNames: "[name].mjs",
         preserveModules: true,
@@ -51,7 +52,7 @@ export default defineConfig({
     viteStaticCopy({
       targets: [
         {
-          src: ".stormkit/public/index.html",
+          src: "../.stormkit/public/index.html",
           dest: "../.stormkit/server",
         },
       ],

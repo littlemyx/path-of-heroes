@@ -4,6 +4,7 @@ import react from "@vitejs/plugin-react";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  root: "frontend",
   server: {
     hmr: {
       port: Number(process.env.PORT_HMR) || undefined,
@@ -13,7 +14,7 @@ export default defineConfig({
     alias: [
       {
         find: /^~/,
-        replacement: path.resolve(__dirname, "src"),
+        replacement: path.resolve(__dirname, "frontend/src"),
       },
     ],
     extensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json"],
@@ -21,9 +22,9 @@ export default defineConfig({
   build: {
     manifest: true,
     rollupOptions: {
-      input: "index.html",
+      input: path.resolve(__dirname, "frontend/index.html"),
     },
-    outDir: ".stormkit/public",
+    outDir: "../.stormkit/public",
   },
   plugins: [react()],
 });

@@ -41,19 +41,28 @@ Visit `http://localhost:5173` to see your app running with HMR enabled.
 ## 📁 Project Structure
 
 ```
-src/
-├── api/                 # API routes (serverless functions)
-│   └── hello.ts        # Example API endpoint
-├── pages/              # Application pages
-│   ├── home.tsx        # Home page (SPA)
-│   ├── about.tsx       # About page (SPA)
-│   └── ssr.tsx         # SSR example with fetchData
-├── components/         # Reusable components
-├── context.ts          # React context for data sharing
-├── entry-client.tsx    # Client-side entry point
-├── entry-server.tsx    # Server-side entry point
-├── prerender.ts        # SSG route configuration
-└── App.tsx            # Main application component
+frontend/
+├── src/
+│   ├── api/                 # API routes (serverless functions)
+│   │   └── hello.ts        # Example API endpoint
+│   ├── pages/              # Application pages
+│   │   ├── index.tsx       # Home page (SPA)
+│   │   ├── prerender.tsx   # Pre-rendered page
+│   │   └── ssr.tsx         # SSR example with fetchData
+│   ├── components/         # Reusable components
+│   ├── context.ts          # React context for data sharing
+│   ├── entry-client.tsx    # Client-side entry point
+│   ├── entry-server.tsx    # Server-side entry point
+│   ├── prerender.ts        # SSG route configuration
+│   ├── vite-server.ts      # Development server
+│   └── App.tsx            # Main application component
+├── public/                 # Public assets
+└── index.html             # HTML template
+
+server/
+└── index.js               # Express.js server for serving static files and API endpoints
+
+static/                    # Static files served by Express server
 ```
 
 ## 🔧 Build Commands
@@ -61,7 +70,14 @@ src/
 ### Development Server
 
 ```bash
+# Run Vite development server (frontend)
 npm run dev
+
+# Run Express server (for static files and API endpoints)
+npm run server
+
+# Run Express server with auto-restart
+npm run server:dev
 ```
 
 Starts development server with HMR at `http://localhost:5173`
