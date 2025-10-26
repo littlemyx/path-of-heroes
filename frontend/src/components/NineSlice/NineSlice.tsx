@@ -2,6 +2,10 @@ import { CSSProperties } from "react";
 import css from "./NineSlice.module.css";
 import nineSliceImage from "~/assets/Generated_Image_October_26__2025_-_1_50PM-removebg-preview.png";
 
+// Image dimensions - these match the actual PNG file size
+const IMAGE_WIDTH = 881;
+const IMAGE_HEIGHT = 283;
+
 interface NineSliceProps {
   width?: string | number;
   height?: string | number;
@@ -28,10 +32,13 @@ export const NineSlice = ({
 
   const backgroundStyle: CSSProperties = {
     backgroundImage: `url(${nineSliceImage})`,
-    backgroundSize: "881px 283px", // Original image size
+    backgroundSize: `${IMAGE_WIDTH}px ${IMAGE_HEIGHT}px`,
   };
 
   // Calculate positions for slicing
+  const rightPos = IMAGE_WIDTH - sliceRight;
+  const bottomPos = IMAGE_HEIGHT - sliceBottom;
+
   const topLeftStyle: CSSProperties = {
     ...backgroundStyle,
     backgroundPosition: "0 0",
@@ -42,13 +49,13 @@ export const NineSlice = ({
   const topStyle: CSSProperties = {
     ...backgroundStyle,
     backgroundPosition: `-${sliceLeft}px 0`,
-    backgroundSize: `calc(881px + 100% - ${sliceLeft + sliceRight}px) 283px`,
+    backgroundSize: `calc(${IMAGE_WIDTH}px + 100% - ${sliceLeft + sliceRight}px) ${IMAGE_HEIGHT}px`,
     height: `${sliceTop}px`,
   };
 
   const topRightStyle: CSSProperties = {
     ...backgroundStyle,
-    backgroundPosition: "-831px 0", // 881 - 50
+    backgroundPosition: `-${rightPos}px 0`,
     width: `${sliceRight}px`,
     height: `${sliceTop}px`,
   };
@@ -56,40 +63,40 @@ export const NineSlice = ({
   const leftStyle: CSSProperties = {
     ...backgroundStyle,
     backgroundPosition: `0 -${sliceTop}px`,
-    backgroundSize: `881px calc(283px + 100% - ${sliceTop + sliceBottom}px)`,
+    backgroundSize: `${IMAGE_WIDTH}px calc(${IMAGE_HEIGHT}px + 100% - ${sliceTop + sliceBottom}px)`,
     width: `${sliceLeft}px`,
   };
 
   const centerStyle: CSSProperties = {
     ...backgroundStyle,
     backgroundPosition: `-${sliceLeft}px -${sliceTop}px`,
-    backgroundSize: `calc(881px + 100% - ${sliceLeft + sliceRight}px) calc(283px + 100% - ${sliceTop + sliceBottom}px)`,
+    backgroundSize: `calc(${IMAGE_WIDTH}px + 100% - ${sliceLeft + sliceRight}px) calc(${IMAGE_HEIGHT}px + 100% - ${sliceTop + sliceBottom}px)`,
   };
 
   const rightStyle: CSSProperties = {
     ...backgroundStyle,
-    backgroundPosition: `-831px -${sliceTop}px`,
-    backgroundSize: `881px calc(283px + 100% - ${sliceTop + sliceBottom}px)`,
+    backgroundPosition: `-${rightPos}px -${sliceTop}px`,
+    backgroundSize: `${IMAGE_WIDTH}px calc(${IMAGE_HEIGHT}px + 100% - ${sliceTop + sliceBottom}px)`,
     width: `${sliceRight}px`,
   };
 
   const bottomLeftStyle: CSSProperties = {
     ...backgroundStyle,
-    backgroundPosition: "0 -233px", // 283 - 50
+    backgroundPosition: `0 -${bottomPos}px`,
     width: `${sliceLeft}px`,
     height: `${sliceBottom}px`,
   };
 
   const bottomStyle: CSSProperties = {
     ...backgroundStyle,
-    backgroundPosition: `-${sliceLeft}px -233px`,
-    backgroundSize: `calc(881px + 100% - ${sliceLeft + sliceRight}px) 283px`,
+    backgroundPosition: `-${sliceLeft}px -${bottomPos}px`,
+    backgroundSize: `calc(${IMAGE_WIDTH}px + 100% - ${sliceLeft + sliceRight}px) ${IMAGE_HEIGHT}px`,
     height: `${sliceBottom}px`,
   };
 
   const bottomRightStyle: CSSProperties = {
     ...backgroundStyle,
-    backgroundPosition: "-831px -233px",
+    backgroundPosition: `-${rightPos}px -${bottomPos}px`,
     width: `${sliceRight}px`,
     height: `${sliceBottom}px`,
   };
