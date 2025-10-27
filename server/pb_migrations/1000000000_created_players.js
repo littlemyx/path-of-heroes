@@ -1,112 +1,125 @@
 /// <reference path="../pb_data/types.d.ts" />
-migrate((db) => {
-  const collection = new Collection({
-    "id": "players_collection",
-    "created": "2024-01-01 00:00:00.000Z",
-    "updated": "2024-01-01 00:00:00.000Z",
-    "name": "players",
-    "type": "base",
-    "system": false,
-    "schema": [
-      {
-        "system": false,
-        "id": "username_field",
-        "name": "username",
-        "type": "text",
-        "required": true,
-        "presentable": false,
-        "unique": true,
-        "options": {
-          "min": 3,
-          "max": 50,
-          "pattern": ""
-        }
-      },
-      {
-        "system": false,
-        "id": "email_field",
-        "name": "email",
-        "type": "email",
-        "required": true,
-        "presentable": false,
-        "unique": true,
-        "options": {
-          "exceptDomains": [],
-          "onlyDomains": []
-        }
-      },
-      {
-        "system": false,
-        "id": "level_field",
-        "name": "level",
-        "type": "number",
-        "required": false,
-        "presentable": false,
-        "unique": false,
-        "options": {
-          "min": 1,
-          "max": null,
-          "noDecimal": true
-        }
-      },
-      {
-        "system": false,
-        "id": "experience_field",
-        "name": "experience",
-        "type": "number",
-        "required": false,
-        "presentable": false,
-        "unique": false,
-        "options": {
-          "min": 0,
-          "max": null,
-          "noDecimal": true
-        }
-      },
-      {
-        "system": false,
-        "id": "status_field",
-        "name": "status",
-        "type": "select",
-        "required": false,
-        "presentable": false,
-        "unique": false,
-        "options": {
-          "maxSelect": 1,
-          "values": [
-            "online",
-            "offline",
-            "away"
-          ]
-        }
-      },
-      {
-        "system": false,
-        "id": "lastseen_field",
-        "name": "lastSeen",
-        "type": "date",
-        "required": false,
-        "presentable": false,
-        "unique": false,
-        "options": {
-          "min": "",
-          "max": ""
-        }
-      }
-    ],
-    "indexes": [],
-    "listRule": "",
-    "viewRule": "",
-    "createRule": "",
-    "updateRule": "",
-    "deleteRule": "",
-    "options": {}
-  });
 
-  return Dao(db).saveCollection(collection);
-}, (db) => {
-  const dao = new Dao(db);
-  const collection = dao.findCollectionByNameOrId("players_collection");
+migrate(
+  app => {
+    const collection = new Collection({
+      id: "players_collection",
+      name: "players",
+      type: "base",
+      system: false,
+      listRule: null,
+      viewRule: null,
+      createRule: null,
+      updateRule: null,
+      deleteRule: null,
+      indexes: [
+        "CREATE UNIQUE INDEX idx_players_username ON players (username)",
+        "CREATE UNIQUE INDEX idx_players_email ON players (email)"
+      ],
+      fields: [
+        {
+          id: "username_field",
+          name: "username",
+          type: "text",
+          system: false,
+          hidden: false,
+          presentable: false,
+          required: true,
+          primaryKey: false,
+          min: 3,
+          max: 50,
+          pattern: "",
+          autogeneratePattern: ""
+        },
+        {
+          id: "email_field",
+          name: "email",
+          type: "email",
+          system: false,
+          hidden: false,
+          presentable: false,
+          required: true,
+          exceptDomains: [],
+          onlyDomains: []
+        },
+        {
+          id: "level_field",
+          name: "level",
+          type: "number",
+          system: false,
+          hidden: false,
+          presentable: false,
+          required: false,
+          min: 1,
+          max: null,
+          onlyInt: true
+        },
+        {
+          id: "experience_field",
+          name: "experience",
+          type: "number",
+          system: false,
+          hidden: false,
+          presentable: false,
+          required: false,
+          min: 0,
+          max: null,
+          onlyInt: true
+        },
+        {
+          id: "status_field",
+          name: "status",
+          type: "select",
+          system: false,
+          hidden: false,
+          presentable: false,
+          required: false,
+          values: ["online", "offline", "away"],
+          maxSelect: 1
+        },
+        {
+          id: "lastseen_field",
+          name: "lastSeen",
+          type: "date",
+          system: false,
+          hidden: false,
+          presentable: false,
+          required: false,
+          min: "",
+          max: ""
+        },
+        {
+          id: "created_field",
+          name: "created",
+          type: "autodate",
+          system: false,
+          hidden: false,
+          presentable: false,
+          onCreate: true,
+          onUpdate: false
+        },
+        {
+          id: "updated_field",
+          name: "updated",
+          type: "autodate",
+          system: false,
+          hidden: false,
+          presentable: false,
+          onCreate: true,
+          onUpdate: true
+        }
+      ],
+      options: {}
+    });
 
-  return dao.deleteCollection(collection);
-});
+    app.save(collection);
+  },
+  app => {
+    try {
+      const collection = app.findCollectionByNameOrId("players_collection");
+      app.delete(collection);
+    } catch {
+      // collection already missing
+    }
+  }
+);

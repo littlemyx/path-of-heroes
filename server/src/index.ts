@@ -1,8 +1,8 @@
-import express, { Request, Response, NextFunction } from 'express';
-import cors from 'cors';
-import dotenv from 'dotenv';
-import playerRoutes from './routes/players.js';
-import { errorHandler } from './middleware/errorHandler.js';
+import express, { Request, Response, NextFunction } from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import playerRoutes from "./routes/players.js";
+import { errorHandler } from "./middleware/errorHandler.js";
 
 dotenv.config();
 
@@ -15,21 +15,21 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Health check endpoint
-app.get('/health', (req: Request, res: Response) => {
-  res.json({ 
-    status: 'ok', 
+app.get("/health", (req: Request, res: Response) => {
+  res.json({
+    status: "ok",
     timestamp: new Date().toISOString(),
-    service: 'Path of Heroes Backend'
+    service: "Path of Heroes Backend"
   });
 });
 
 // Routes
-app.use('/api/players', playerRoutes);
+app.use("/api/players", playerRoutes);
 
 // 404 handler
 app.use((req: Request, res: Response) => {
-  res.status(404).json({ 
-    error: 'Not Found',
+  res.status(404).json({
+    error: "Not Found",
     message: `Route ${req.method} ${req.path} not found`
   });
 });

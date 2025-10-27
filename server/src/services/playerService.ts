@@ -1,32 +1,41 @@
-import PocketBase from 'pocketbase';
-import { Player, PlayerCreate, PlayerUpdate } from '../types/player.js';
+import PocketBase from "pocketbase";
+import { Player, PlayerCreate, PlayerUpdate } from "../types/player.js";
 
-const POCKETBASE_URL = process.env.POCKETBASE_URL || 'http://127.0.0.1:8090';
+const POCKETBASE_URL = process.env.POCKETBASE_URL || "http://127.0.0.1:8090";
 const pb = new PocketBase(POCKETBASE_URL);
 
 // Disable auto cancellation for better reliability
 pb.autoCancellation(false);
 
-const COLLECTION_NAME = 'players';
+const COLLECTION_NAME = "players";
 
 export class PlayerService {
   /**
    * Get all players
    */
-  async getAllPlayers(page = 1, perPage = 50): Promise<{ items: Player[], totalPages: number, totalItems: number }> {
+  async getAllPlayers(
+    page = 1,
+    perPage = 50
+  ): Promise<{ items: Player[]; totalPages: number; totalItems: number }> {
     try {
-      const result = await pb.collection(COLLECTION_NAME).getList(page, perPage, {
-        sort: '-created',
+      const result = await pb
+        .collection(COLLECTION_NAME)
+        .getList(page, perPage);
+
+      const items = (result.items as unknown as Player[]).sort((a, b) => {
+        const aCreated = new Date(a.created ?? 0).getTime();
+        const bCreated = new Date(b.created ?? 0).getTime();
+        return bCreated - aCreated;
       });
-      
+
       return {
-        items: result.items as unknown as Player[],
+        items,
         totalPages: result.totalPages,
         totalItems: result.totalItems
       };
     } catch (error) {
-      console.error('Error fetching players:', error);
-      throw new Error('Failed to fetch players');
+      console.error("Error fetching players:", error);
+      throw new Error("Failed to fetch players");
     }
   }
 
@@ -38,8 +47,8 @@ export class PlayerService {
       const player = await pb.collection(COLLECTION_NAME).getOne(id);
       return player as unknown as Player;
     } catch (error) {
-      console.error('Error fetching player by id:', error);
-      throw new Error('Player not found');
+      console.error("Error fetching player by id:", error);
+      throw new Error("Player not found");
     }
   }
 
@@ -53,15 +62,15 @@ export class PlayerService {
         email: data.email,
         level: data.level || 1,
         experience: data.experience || 0,
-        status: data.status || 'offline',
+        status: data.status || "offline",
         lastSeen: new Date().toISOString()
       };
 
       const player = await pb.collection(COLLECTION_NAME).create(playerData);
       return player as unknown as Player;
     } catch (error) {
-      console.error('Error creating player:', error);
-      throw new Error('Failed to create player');
+      console.error("Error creating player:", error);
+      throw new Error("Failed to create player");
     }
   }
 
@@ -71,17 +80,19 @@ export class PlayerService {
   async updatePlayer(id: string, data: PlayerUpdate): Promise<Player> {
     try {
       const updateData: any = { ...data };
-      
+
       // Update lastSeen when status changes to online
-      if (data.status === 'online') {
+      if (data.status === "online") {
         updateData.lastSeen = new Date().toISOString();
       }
 
-      const player = await pb.collection(COLLECTION_NAME).update(id, updateData);
+      const player = await pb
+        .collection(COLLECTION_NAME)
+        .update(id, updateData);
       return player as unknown as Player;
     } catch (error) {
-      console.error('Error updating player:', error);
-      throw new Error('Failed to update player');
+      console.error("Error updating player:", error);
+      throw new Error("Failed to update player");
     }
   }
 
@@ -93,30 +104,36 @@ export class PlayerService {
       await pb.collection(COLLECTION_NAME).delete(id);
       return true;
     } catch (error) {
-      console.error('Error deleting player:', error);
-      throw new Error('Failed to delete player');
+      console.error("Error deleting player:", error);
+      throw new Error("Failed to delete player");
     }
   }
 
   /**
    * Get players by status
    */
-  async getPlayersByStatus(status: 'online' | 'offline' | 'away'): Promise<Player[]> {
+  async getPlayersByStatus(
+    status: "online" | "offline" | "away"
+  ): Promise<Player[]> {
     try {
       // Validate status to prevent injection
-      const validStatuses = ['online', 'offline', 'away'];
+      const validStatuses = ["online", "offline", "away"];
       if (!validStatuses.includes(status)) {
-        throw new Error('Invalid status value');
+        throw new Error("Invalid status value");
       }
-      
+
       const result = await pb.collection(COLLECTION_NAME).getFullList({
-        filter: `status = "${status}"`,
-        sort: '-lastSeen',
+        filter: `status = "${status}"`
       });
-      return result as unknown as Player[];
+
+      return (result as unknown as Player[]).sort((a, b) => {
+        const aLastSeen = new Date(a.lastSeen ?? 0).getTime();
+        const bLastSeen = new Date(b.lastSeen ?? 0).getTime();
+        return bLastSeen - aLastSeen;
+      });
     } catch (error) {
-      console.error('Error fetching players with status:', status);
-      throw new Error('Failed to fetch players by status');
+      console.error("Error fetching players with status:", status);
+      throw new Error("Failed to fetch players by status");
     }
   }
 
@@ -126,16 +143,20 @@ export class PlayerService {
   async searchPlayers(query: string): Promise<Player[]> {
     try {
       // Sanitize query to prevent injection - escape quotes
-      const sanitizedQuery = query.replace(/["'\\]/g, '\\$&');
-      
+      const sanitizedQuery = query.replace(/["'\\]/g, "\\$&");
+
       const result = await pb.collection(COLLECTION_NAME).getFullList({
-        filter: `username ~ "${sanitizedQuery}"`,
-        sort: '-created',
+        filter: `username ~ "${sanitizedQuery}"`
       });
-      return result as unknown as Player[];
+
+      return (result as unknown as Player[]).sort((a, b) => {
+        const aCreated = new Date(a.created ?? 0).getTime();
+        const bCreated = new Date(b.created ?? 0).getTime();
+        return bCreated - aCreated;
+      });
     } catch (error) {
-      console.error('Error searching players');
-      throw new Error('Failed to search players');
+      console.error("Error searching players");
+      throw new Error("Failed to search players");
     }
   }
 }
