@@ -12,10 +12,12 @@ Backend server for Path of Heroes multiplayer game. Built with Express.js, TypeS
 ## 📋 Prerequisites
 
 ### With Docker (Recommended)
+
 - Docker
 - Docker Compose
 
 ### Without Docker
+
 - Node.js (v18 or higher)
 - npm or yarn
 - PocketBase (downloaded separately or installed globally)
@@ -32,16 +34,25 @@ docker-compose up -d
 ```
 
 This will:
+
 - Start PocketBase on `http://localhost:8090`
 - Start the backend API on `http://localhost:3000`
 - Automatically create the players collection from migrations
 
+If you ever need to re-apply the schema manually (for example after cleaning the data folder), run:
+
+```bash
+docker-compose exec pocketbase pocketbase migrate
+```
+
 To view logs:
+
 ```bash
 docker-compose logs -f
 ```
 
 To stop the services:
+
 ```bash
 docker-compose down
 ```
@@ -49,8 +60,8 @@ docker-compose down
 #### First Time Setup with Docker
 
 1. After starting the containers, open PocketBase Admin UI at `http://localhost:8090/_/`
-2. Create an admin account
-3. The players collection will be created automatically from the migration file
+2. Create an admin account (either through the UI wizard or via CLI, e.g. `docker-compose exec pocketbase pocketbase superuser upsert your@mail.com "StrongPassword"`)
+3. The players collection and its public access rules will be created automatically from the migration files
 
 ### Option B: Manual Setup
 
@@ -106,14 +117,18 @@ Alternatively, you can manually create the collection:
 3. Go to **Collections** → **New Collection**
 4. Create a collection named `players` with the following schema:
 
-| Field Name | Type   | Required | Options                    |
-|------------|--------|----------|----------------------------|
-| username   | Text   | Yes      | Min: 3, Max: 50, Unique   |
-| email      | Email  | Yes      | Unique                     |
-| level      | Number | No       | Min: 1, Default: 1        |
-| experience | Number | No       | Min: 0, Default: 0        |
-| status     | Select | No       | Values: online, offline, away |
-| lastSeen   | Date   | No       | -                          |
+| Field Name | Type      | Required | Options                       |
+| ---------- | --------- | -------- | ----------------------------- |
+| username   | Text      | Yes      | Min: 3, Max: 50, Unique       |
+| email      | Email     | Yes      | Unique                        |
+| level      | Number    | No       | Min: 1, Integer               |
+| experience | Number    | No       | Min: 0, Integer               |
+| status     | Select    | No       | Values: online, offline, away |
+| lastSeen   | Date      | No       | -                             |
+| created    | Auto Date | No       | Auto set on create            |
+| updated    | Auto Date | No       | Auto set on create/update     |
+
+The default migration also leaves all PocketBase collection rules empty, which means the API is publicly accessible. Tighten these rules before shipping to production if you need stricter access control.
 
 5. Save the collection
 
@@ -144,6 +159,7 @@ GET /api/players
 ```
 
 Query parameters:
+
 - `page` (number): Page number for pagination (default: 1)
 - `perPage` (number): Items per page (default: 50)
 - `status` (string): Filter by status (online/offline/away)
@@ -263,7 +279,7 @@ interface Player {
   email: string;
   level: number;
   experience: number;
-  status: 'online' | 'offline' | 'away';
+  status: "online" | "offline" | "away";
   lastSeen?: Date | string;
   created?: Date | string;
   updated?: Date | string;
@@ -301,10 +317,12 @@ curl -X DELETE http://localhost:3000/api/players/{player_id}
 ## 🔒 Production Considerations
 
 1. **Environment Variables**: Never commit `.env` files
-2. **PocketBase Security**: 
-   - Set up proper authentication rules in PocketBase
-   - Configure CORS settings appropriately
-   - Use HTTPS in production
+2. **PocketBase Security**:
+
+- Set up proper authentication rules in PocketBase (the sample migration keeps the `players` collection public by default)
+- Configure CORS settings appropriately
+- Use HTTPS in production
+
 3. **Rate Limiting**: Consider adding rate limiting middleware
 4. **Input Validation**: Add comprehensive input validation
 5. **Logging**: Implement proper logging for production
@@ -314,6 +332,7 @@ curl -X DELETE http://localhost:3000/api/players/{player_id}
 ### PocketBase Connection Error
 
 If you see connection errors:
+
 1. Ensure PocketBase is running on the correct port
 2. Check `POCKETBASE_URL` in `.env`
 3. Verify the `players` collection exists in PocketBase
