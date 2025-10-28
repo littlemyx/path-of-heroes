@@ -1,0 +1,194 @@
+/// <reference path="../pb_data/types.d.ts" />
+
+migrate(
+  app => {
+    const collection = new Collection({
+      id: "players_collection",
+      name: "players",
+      type: "base",
+      system: false,
+      listRule: null,
+      viewRule: null,
+      createRule: null,
+      updateRule: null,
+      deleteRule: null,
+      schema: [
+        {
+          system: false,
+          id: "username_field",
+          name: "username",
+          type: "text",
+          required: true,
+          unique: true,
+          presentable: false,
+          hidden: false,
+          options: {
+            min: 3,
+            max: 50,
+            pattern: ""
+          }
+        },
+        {
+          system: false,
+          id: "email_field",
+          name: "email",
+          type: "email",
+          required: true,
+          unique: true,
+          presentable: false,
+          hidden: false,
+          options: {
+            exceptDomains: null,
+            onlyDomains: null
+          }
+        },
+        {
+          system: false,
+          id: "level_field",
+          name: "level",
+          type: "number",
+          required: false,
+          unique: false,
+          presentable: false,
+          hidden: false,
+          options: {
+            min: 1,
+            max: null,
+            noDecimal: true
+          }
+        },
+        {
+          system: false,
+          id: "experience_field",
+          name: "experience",
+          type: "number",
+          required: false,
+          unique: false,
+          presentable: false,
+          hidden: false,
+          options: {
+            min: 0,
+            max: null,
+            noDecimal: true
+          }
+        },
+        {
+          system: false,
+          id: "status_field",
+          name: "status",
+          type: "select",
+          required: false,
+          unique: false,
+          presentable: false,
+          hidden: false,
+          options: {
+            maxSelect: 1,
+            values: ["online", "offline", "away"],
+            cascadeDelete: false
+          }
+        },
+        {
+          system: false,
+          id: "lastseen_field",
+          name: "lastSeen",
+          type: "date",
+          required: false,
+          unique: false,
+          presentable: false,
+          hidden: false,
+          options: {
+            min: "",
+            max: ""
+          }
+        }
+      ],
+      fields: [
+        new TextField({
+          id: "username_field",
+          name: "username",
+          system: false,
+          hidden: false,
+          presentable: false,
+          required: true,
+          min: 3,
+          max: 50,
+          pattern: "",
+          autogeneratePattern: "",
+          unique: true
+        }),
+        new EmailField({
+          id: "email_field",
+          name: "email",
+          system: false,
+          hidden: false,
+          presentable: false,
+          required: true,
+          exceptDomains: null,
+          onlyDomains: null,
+          unique: true
+        }),
+        new NumberField({
+          id: "level_field",
+          name: "level",
+          system: false,
+          hidden: false,
+          presentable: false,
+          required: false,
+          min: 1,
+          max: null,
+          onlyInt: true,
+          unique: false
+        }),
+        new NumberField({
+          id: "experience_field",
+          name: "experience",
+          system: false,
+          hidden: false,
+          presentable: false,
+          required: false,
+          min: 0,
+          max: null,
+          onlyInt: true,
+          unique: false
+        }),
+        new SelectField({
+          id: "status_field",
+          name: "status",
+          system: false,
+          hidden: false,
+          presentable: false,
+          required: false,
+          maxSelect: 1,
+          values: ["online", "offline", "away"],
+          cascadeDelete: false,
+          unique: false
+        }),
+        new DateField({
+          id: "lastseen_field",
+          name: "lastSeen",
+          system: false,
+          hidden: false,
+          presentable: false,
+          required: false,
+          min: "",
+          max: "",
+          unique: false
+        })
+      ],
+      indexes: [
+        "CREATE UNIQUE INDEX idx_players_username ON players (username)",
+        "CREATE UNIQUE INDEX idx_players_email ON players (email)"
+      ]
+    });
+
+    app.save(collection);
+  },
+  app => {
+    try {
+      const collection = app.findCollectionByNameOrId("players_collection");
+      app.delete(collection);
+    } catch {
+      // collection already missing
+    }
+  }
+);
