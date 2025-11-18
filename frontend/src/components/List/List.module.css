@@ -1,0 +1,16 @@
+.wrapper {
+  padding: 10px;
+}
+
+.wrapper ul,
+.wrapper ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.wrapper li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}

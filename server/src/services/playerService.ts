@@ -1,5 +1,9 @@
 import PocketBase from "pocketbase";
-import { Player, PlayerCreate, PlayerUpdate } from "../types/player.js";
+import {
+  PlayersRecord,
+  PlayersResponse,
+  ItemsResponse
+} from "../types/pb-types";
 
 const POCKETBASE_URL = process.env.POCKETBASE_URL || "http://127.0.0.1:8090";
 const pb = new PocketBase(POCKETBASE_URL);
@@ -9,24 +13,73 @@ pb.autoCancellation(false);
 
 const COLLECTION_NAME = "players";
 
+export interface PlayersRecordWithItems {
+  items: PlayersRecord[];
+  totalPages: number;
+  totalItems: number;
+}
+
 export class PlayerService {
+  private mergeExpandedRelations<
+    ExpandName extends keyof PlayersRecord,
+    ExpandType
+  >(
+    expandKey: ExpandName,
+    record: PlayersResponse<Record<ExpandName, ExpandType>>
+  ): PlayersResponse<Record<ExpandName, ExpandType>> {
+    const normalizedRecord = { ...record } as PlayersResponse<
+      Record<ExpandName, ExpandType>
+    >;
+    const expandMap = record.expand as
+      | Record<ExpandName, ExpandType>
+      | undefined;
+    const expanded = expandMap?.[expandKey];
+
+    if (expanded !== undefined) {
+      (normalizedRecord as Record<ExpandName, ExpandType>)[expandKey] =
+        expanded;
+    }
+    // if (expandedValue !== undefined) {
+    //   normalizedRecord[expandKey] = expandedValue;
+    // }
+
+    return normalizedRecord;
+  }
+
   /**
    * Get all players
    */
   async getAllPlayers(
     page = 1,
-    perPage = 50
-  ): Promise<{ items: Player[]; totalPages: number; totalItems: number }> {
+    perPage = 50,
+    expand?: string
+  ): Promise<PlayersRecordWithItems> {
     try {
+      const queryParams = expand ? { expand } : undefined;
+      console.log("Query params:", queryParams);
       const result = await pb
         .collection(COLLECTION_NAME)
-        .getList(page, perPage);
+        .getList<PlayersResponse<Record<"items", ItemsResponse>>>(
+          page,
+          perPage,
+          {
+            expand: "items"
+          }
+        );
 
-      const items = (result.items as unknown as Player[]).sort((a, b) => {
-        const aCreated = new Date(a.created ?? 0).getTime();
-        const bCreated = new Date(b.created ?? 0).getTime();
-        return bCreated - aCreated;
-      });
+      console.log("Fetched players:", result.items[0].items);
+
+      const normalizedItems = result.items.map(record =>
+        this.mergeExpandedRelations<"items", ItemsResponse>("items", record)
+      );
+
+      const items = (normalizedItems as unknown as PlayersRecord[]).sort(
+        (a, b) => {
+          const aCreated = new Date(a.created ?? 0).getTime();
+          const bCreated = new Date(b.created ?? 0).getTime();
+          return bCreated - aCreated;
+        }
+      );
 
       return {
         items,
@@ -42,10 +95,10 @@ export class PlayerService {
   /**
    * Get a player by ID
    */
-  async getPlayerById(id: string): Promise<Player> {
+  async getPlayerById(id: string): Promise<PlayersRecord> {
     try {
       const player = await pb.collection(COLLECTION_NAME).getOne(id);
-      return player as unknown as Player;
+      return player as unknown as PlayersRecord;
     } catch (error) {
       console.error("Error fetching player by id:", error);
       throw new Error("Player not found");
@@ -55,19 +108,10 @@ export class PlayerService {
   /**
    * Create a new player
    */
-  async createPlayer(data: PlayerCreate): Promise<Player> {
+  async createPlayer(data: PlayersRecord): Promise<PlayersRecord> {
     try {
-      const playerData = {
-        username: data.username,
-        email: data.email,
-        level: data.level || 1,
-        experience: data.experience || 0,
-        status: data.status || "offline",
-        lastSeen: new Date().toISOString()
-      };
-
-      const player = await pb.collection(COLLECTION_NAME).create(playerData);
-      return player as unknown as Player;
+      const player = await pb.collection(COLLECTION_NAME).create(data);
+      return player as unknown as PlayersRecord;
     } catch (error) {
       console.error("Error creating player:", error);
       throw new Error("Failed to create player");
@@ -77,19 +121,10 @@ export class PlayerService {
   /**
    * Update a player
    */
-  async updatePlayer(id: string, data: PlayerUpdate): Promise<Player> {
+  async updatePlayer(id: string, data: PlayersRecord): Promise<PlayersRecord> {
     try {
-      const updateData: any = { ...data };
-
-      // Update lastSeen when status changes to online
-      if (data.status === "online") {
-        updateData.lastSeen = new Date().toISOString();
-      }
-
-      const player = await pb
-        .collection(COLLECTION_NAME)
-        .update(id, updateData);
-      return player as unknown as Player;
+      const player = await pb.collection(COLLECTION_NAME).update(id, data);
+      return player as unknown as PlayersRecord;
     } catch (error) {
       console.error("Error updating player:", error);
       throw new Error("Failed to update player");
@@ -114,7 +149,7 @@ export class PlayerService {
    */
   async getPlayersByStatus(
     status: "online" | "offline" | "away"
-  ): Promise<Player[]> {
+  ): Promise<PlayersRecord[]> {
     try {
       // Validate status to prevent injection
       const validStatuses = ["online", "offline", "away"];
@@ -126,9 +161,9 @@ export class PlayerService {
         filter: `status = "${status}"`
       });
 
-      return (result as unknown as Player[]).sort((a, b) => {
-        const aLastSeen = new Date(a.lastSeen ?? 0).getTime();
-        const bLastSeen = new Date(b.lastSeen ?? 0).getTime();
+      return (result as unknown as PlayersRecord[]).sort((a, b) => {
+        const aLastSeen = new Date(a.updated ?? 0).getTime();
+        const bLastSeen = new Date(b.updated ?? 0).getTime();
         return bLastSeen - aLastSeen;
       });
     } catch (error) {
@@ -140,16 +175,23 @@ export class PlayerService {
   /**
    * Search players by username
    */
-  async searchPlayers(query: string): Promise<Player[]> {
+  async searchPlayers(query: string): Promise<PlayersRecord[]> {
     try {
       // Sanitize query to prevent injection - escape quotes
       const sanitizedQuery = query.replace(/["'\\]/g, "\\$&");
 
-      const result = await pb.collection(COLLECTION_NAME).getFullList({
-        filter: `username ~ "${sanitizedQuery}"`
-      });
+      const result = await pb
+        .collection(COLLECTION_NAME)
+        .getFullList<PlayersResponse<Record<"items", ItemsResponse>>>({
+          filter: `username ~ "${sanitizedQuery}"`,
+          expand: "items"
+        });
 
-      return (result as unknown as Player[]).sort((a, b) => {
+      const normalizedItems = result.map(record =>
+        this.mergeExpandedRelations<"items", ItemsResponse>("items", record)
+      );
+
+      return (normalizedItems as unknown as PlayersRecord[]).sort((a, b) => {
         const aCreated = new Date(a.created ?? 0).getTime();
         const bCreated = new Date(b.created ?? 0).getTime();
         return bCreated - aCreated;

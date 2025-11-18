@@ -10,12 +10,12 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const files = glob
   .sync("src/api/**/*.ts")
   // Filter out private files
-  .filter((file) => {
+  .filter(file => {
     return file.indexOf("_") !== 0 && file.indexOf("/_") === -1;
   })
   .map((file: string) => ({
     entry: `./${file}`,
-    distFileName: file.replace("src/api/", "").replace(".ts", ""),
+    distFileName: file.replace("src/api/", "").replace(".ts", "")
   }));
 
 (async () => {
@@ -26,10 +26,18 @@ const files = glob
         alias: [
           {
             find: /^~/,
-            replacement: path.resolve(__dirname, "src"),
+            replacement: path.resolve(__dirname, "src")
           },
+          {
+            find: "@uikit",
+            replacement: path.resolve(__dirname, "src/uikit")
+          },
+          {
+            find: "@hooks",
+            replacement: path.resolve(__dirname, "src/hooks")
+          }
         ],
-        extensions: [".ts", ".tsx"],
+        extensions: [".ts", ".tsx"]
       },
       define: {
         ...Object.keys(process.env).reduce(
@@ -38,7 +46,7 @@ const files = glob
             return obj;
           },
           {}
-        ),
+        )
       },
       build: {
         ssr: true,
@@ -46,17 +54,17 @@ const files = glob
         copyPublicDir: false,
         rollupOptions: {
           input: {
-            [file.distFileName]: file.entry,
+            [file.distFileName]: file.entry
           },
           output: {
             dir: ".stormkit/api",
             entryFileNames: "[name].mjs",
             format: "esm",
-            manualChunks: () => "",
-          },
+            manualChunks: () => ""
+          }
         },
-        minify: false,
-      },
+        minify: false
+      }
     });
   }
 })();

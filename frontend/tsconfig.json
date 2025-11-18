@@ -6,7 +6,11 @@
     "moduleResolution": "bundler",
     "jsx": "react-jsx",
     "paths": {
-      "~/*": ["./src/*"]
+      "~/*": ["./src/*"],
+      "@uikit": ["./src/uikit/index.ts"],
+      "@uikit/*": ["./src/uikit/*"],
+      "@hooks": ["./src/hooks/index.ts"],
+      "@hooks/*": ["./src/hooks/*"]
     }
   },
   "include": ["src"],

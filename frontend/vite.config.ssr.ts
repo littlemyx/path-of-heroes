@@ -16,10 +16,18 @@ export default defineConfig({
     alias: [
       {
         find: /^~/,
-        replacement: path.resolve(__dirname, "src"),
+        replacement: path.resolve(__dirname, "src")
       },
+      {
+        find: "@uikit",
+        replacement: path.resolve(__dirname, "src/uikit")
+      },
+      {
+        find: "@hooks",
+        replacement: path.resolve(__dirname, "src/hooks")
+      }
     ],
-    extensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json"],
+    extensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json"]
   },
   build: {
     ssr: true,
@@ -33,9 +41,9 @@ export default defineConfig({
         entryFileNames: "[name].mjs",
         preserveModules: true,
         preserveModulesRoot: "src",
-        exports: "named",
-      },
-    },
+        exports: "named"
+      }
+    }
   },
   define: {
     ...Object.keys(process.env).reduce(
@@ -44,7 +52,7 @@ export default defineConfig({
         return obj;
       },
       {}
-    ),
+    )
   },
   plugins: [
     react(),
@@ -52,9 +60,9 @@ export default defineConfig({
       targets: [
         {
           src: ".stormkit/public/index.html",
-          dest: "../.stormkit/server",
-        },
-      ],
-    }),
-  ],
+          dest: "../.stormkit/server"
+        }
+      ]
+    })
+  ]
 });

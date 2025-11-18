@@ -6,24 +6,32 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   server: {
     hmr: {
-      port: Number(process.env.PORT_HMR) || undefined,
-    },
+      port: Number(process.env.PORT_HMR) || undefined
+    }
   },
   resolve: {
     alias: [
       {
         find: /^~/,
-        replacement: path.resolve(__dirname, "src"),
+        replacement: path.resolve(__dirname, "src")
       },
+      {
+        find: "@uikit",
+        replacement: path.resolve(__dirname, "src/uikit")
+      },
+      {
+        find: "@hooks",
+        replacement: path.resolve(__dirname, "src/hooks")
+      }
     ],
-    extensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json"],
+    extensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json"]
   },
   build: {
     manifest: true,
     rollupOptions: {
-      input: "index.html",
+      input: "index.html"
     },
-    outDir: ".stormkit/public",
+    outDir: ".stormkit/public"
   },
-  plugins: [react()],
+  plugins: [react()]
 });

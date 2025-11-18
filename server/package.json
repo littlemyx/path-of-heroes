@@ -8,9 +8,15 @@
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
-    "pocketbase": "pocketbase serve --http=127.0.0.1:8090"
+    "pocketbase": "pocketbase serve --http=127.0.0.1:8090",
+    "generate-pocket-types": "npx pocketbase-typegen --db ../server/pb_data/data.db --out ../db-types/pocketbase-types.ts"
   },
-  "keywords": ["pocketbase", "express", "multiplayer", "game"],
+  "keywords": [
+    "pocketbase",
+    "express",
+    "multiplayer",
+    "game"
+  ],
   "author": "",
   "license": "MIT",
   "dependencies": {
