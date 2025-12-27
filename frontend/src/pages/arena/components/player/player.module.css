@@ -1,3 +1,96 @@
+/* Player row layout */
+.playerRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background-color: #4a3f32;
+  border: 2px solid #5c4a32;
+  border-radius: 6px;
+  min-height: 56px;
+}
+
+.playerRow.isCurrentPlayer {
+  background-color: #3a3228;
+  border-color: #6a5a42;
+}
+
+/* Avatar placeholder */
+.avatar {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  background-color: #5c4a32;
+  border: 2px solid #3a3228;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #d4c4a8;
+  font-size: 0.7rem;
+}
+
+/* Player info section */
 .playerInfo {
   display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.playerName {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #e8dcc8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.playerLevel {
+  font-size: 0.85rem;
+  color: #a89878;
+}
+
+/* Status icons section */
+.statusIcons {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.statusIcon {
+  width: 28px;
+  height: 28px;
+  background-color: #5c4a32;
+  border: 1px solid #3a3228;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  color: #d4c4a8;
+}
+
+/* Attack button */
+.attackButton {
+  padding: 8px 16px;
+  background-color: #5c4a32;
+  border: 2px solid #3a3228;
+  border-radius: 4px;
+  color: #e8dcc8;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.2s;
+}
+
+.attackButton:hover {
+  background-color: #6a5a42;
+}
+
+/* Items section (hidden for now, kept for future) */
+.items {
+  display: none;
 }

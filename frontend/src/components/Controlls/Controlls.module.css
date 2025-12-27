@@ -1,4 +1,37 @@
+/* Footer navigation wrapper */
 .wrapper {
   display: flex;
-  gap: 1rem;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 12px;
+}
+
+/* Navigation button */
+.navButton {
+  flex: 1;
+  max-width: 120px;
+  padding: 10px 8px;
+  background-color: #5c5048;
+  border: 2px solid #3a3228;
+  border-radius: 4px;
+  color: #c4b8a8;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+
+.navButton:hover {
+  background-color: #6a5a4a;
+  color: #e8dcc8;
+}
+
+/* Active state - orange/golden border */
+.navButton.active {
+  border-color: #d4a04a;
+  box-shadow: 0 0 0 1px #d4a04a;
+  color: #e8dcc8;
+  background-color: #4a4038;
 }

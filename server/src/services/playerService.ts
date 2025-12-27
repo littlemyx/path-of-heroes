@@ -67,7 +67,7 @@ export class PlayerService {
           }
         );
 
-      console.log("Fetched players:", result.items[0].items);
+      console.log("Fetched players:", result.items.length);
 
       const normalizedItems = result.items.map(record =>
         this.mergeExpandedRelations<"items", ItemsResponse>("items", record)

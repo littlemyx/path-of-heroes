@@ -11,6 +11,7 @@ export enum Collections {
   Mfas = "_mfas",
   Otps = "_otps",
   Superusers = "_superusers",
+  Battles = "battles",
   Items = "items",
   Players = "players",
   Users = "users"
@@ -117,6 +118,15 @@ export type PlayersRecord = {
   updated: IsoAutoDateString;
 };
 
+export type BattlesRecord = {
+  created: IsoAutoDateString;
+  id: string;
+  participants: RecordIdString[];
+  winners?: RecordIdString[];
+  battle_log?: string;
+  updated: IsoAutoDateString;
+};
+
 export type UsersRecord = {
   avatar?: FileNameString;
   created: IsoAutoDateString;
@@ -145,6 +155,8 @@ export type ItemsResponse<Texpand = unknown> = Required<ItemsRecord> &
   BaseSystemFields<Texpand>;
 export type PlayersResponse<Texpand = unknown> = Required<PlayersRecord> &
   BaseSystemFields<Texpand>;
+export type BattlesResponse<Texpand = unknown> = Required<BattlesRecord> &
+  BaseSystemFields<Texpand>;
 export type UsersResponse<Texpand = unknown> = Required<UsersRecord> &
   AuthSystemFields<Texpand>;
 
@@ -156,6 +168,7 @@ export type CollectionRecords = {
   _mfas: MfasRecord;
   _otps: OtpsRecord;
   _superusers: SuperusersRecord;
+  battles: BattlesRecord;
   items: ItemsRecord;
   players: PlayersRecord;
   users: UsersRecord;
@@ -167,6 +180,7 @@ export type CollectionResponses = {
   _mfas: MfasResponse;
   _otps: OtpsResponse;
   _superusers: SuperusersResponse;
+  battles: BattlesResponse;
   items: ItemsResponse;
   players: PlayersResponse;
   users: UsersResponse;

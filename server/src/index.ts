@@ -2,6 +2,7 @@ import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import playerRoutes from "./routes/players.js";
+import battleRoutes from "./routes/battles.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 
 dotenv.config();
@@ -25,6 +26,7 @@ app.get("/health", (req: Request, res: Response) => {
 
 // Routes
 app.use("/api/players", playerRoutes);
+app.use("/api/battles", battleRoutes);
 
 // 404 handler
 app.use((req: Request, res: Response) => {
@@ -41,6 +43,7 @@ app.listen(PORT, () => {
   console.log(`🚀 Server is running on port ${PORT}`);
   console.log(`📊 Health check: http://localhost:${PORT}/health`);
   console.log(`🎮 Players API: http://localhost:${PORT}/api/players`);
+  console.log(`⚔️ Battles API: http://localhost:${PORT}/api/battles`);
 });
 
 export default app;

@@ -3,7 +3,7 @@ import { PropsWithChildren } from "react";
 import { NineSlice } from "../NineSlice";
 import { Controlls } from "../Controlls";
 
-import scrollPng from "~/assets/header_pergament_276.png";
+import scrollPng from "~/assets/header_pergament_4096.png";
 
 import css from "./Lyaout.module.css";
 

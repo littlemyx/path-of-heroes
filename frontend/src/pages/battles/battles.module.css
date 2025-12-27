@@ -1,0 +1,108 @@
+/* Battles history page layout */
+.battlesHeader {
+  width: 100%;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #d4c4a8;
+  border: 2px solid #5c4a32;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.headerIcon {
+  font-size: 2rem;
+  margin-right: 12px;
+}
+
+.headerText {
+  color: #5c4a32;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.battlesList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px;
+  background-color: rgba(92, 74, 50, 0.3);
+  border-radius: 8px;
+}
+
+.battleCard {
+  background-color: #3a3228;
+  border: 2px solid #5c4a32;
+  border-radius: 6px;
+  padding: 12px;
+}
+
+.battleDate {
+  font-size: 0.75rem;
+  color: #8a7a5a;
+  margin-bottom: 8px;
+}
+
+.battleParticipants {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.participantName {
+  color: #d4c4a8;
+  font-size: 0.9rem;
+}
+
+.vs {
+  color: #c45c5c;
+  font-weight: bold;
+  font-size: 0.8rem;
+}
+
+.battleResult {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-top: 8px;
+  border-top: 1px solid #5c4a32;
+}
+
+.winnerLabel {
+  color: #8a7a5a;
+  font-size: 0.75rem;
+}
+
+.winnerName {
+  color: #7ac47a;
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+
+.noWinner {
+  color: #8a7a5a;
+  font-style: italic;
+  font-size: 0.85rem;
+}
+
+/* Loading and error states */
+.loading,
+.error {
+  padding: 20px;
+  text-align: center;
+  color: #d4c4a8;
+}
+
+.error {
+  color: #c45c5c;
+}
+
+.emptyState {
+  padding: 40px 20px;
+  text-align: center;
+  color: #8a7a5a;
+  font-style: italic;
+}
+
