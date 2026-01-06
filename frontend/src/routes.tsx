@@ -17,6 +17,7 @@ const routes: Route[] = [
   { path: "/arena", import: () => import("~/pages/arena") },
   { path: "/battles", import: () => import("~/pages/battles") },
   { path: "/map", import: () => import("~/pages/map") },
+  { path: "/character", import: () => import("~/pages/character") },
   { path: "/:name", import: () => import("~/pages/ssr") }
 ];
 

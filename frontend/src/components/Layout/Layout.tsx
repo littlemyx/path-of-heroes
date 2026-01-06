@@ -15,8 +15,8 @@ export const Layout = ({ children, title }: PropsWithChildren<LayoutProps>) => {
   return (
     <div className={css.wrapper}>
       <header>
-        <NineSlice bgImage={scrollPng} bgPadding={92}>
-          <div>{title}</div>
+        <NineSlice bgImage={scrollPng} bgPadding={800} bgPaddingPx={42}>
+          <div className={css.title}>{title}</div>
         </NineSlice>
       </header>
       <main className={css.main}>{children}</main>

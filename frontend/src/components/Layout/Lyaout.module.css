@@ -3,6 +3,11 @@
   flex-direction: column;
   height: 100dvh;
   width: 100dvw;
+  text-align: center;
+}
+
+.title {
+  margin-top: -20px;
 }
 
 .main {

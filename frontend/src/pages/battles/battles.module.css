@@ -1,6 +1,7 @@
 /* Battles history page layout */
 .battlesHeader {
   width: 100%;
+  box-sizing: border-box;
   padding: 16px;
   display: flex;
   align-items: center;

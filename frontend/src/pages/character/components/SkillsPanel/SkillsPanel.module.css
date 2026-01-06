@@ -1,0 +1,90 @@
+/* Skills Panel */
+.skillsPanel {
+  padding: 12px;
+  background: linear-gradient(
+    135deg,
+    rgba(92, 74, 50, 0.5) 0%,
+    rgba(60, 48, 36, 0.7) 100%
+  );
+  border: 2px solid #5c4a32;
+  border-radius: 8px;
+  box-shadow: 
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.panelTitle {
+  font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #a08060;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin: 0 0 10px 0;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(92, 74, 50, 0.6);
+}
+
+/* Skills row - horizontal layout */
+.skillsRow {
+  display: flex;
+  gap: 12px;
+}
+
+/* Individual skill item */
+.skillItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Skill slot (the icon container) */
+.skillSlot {
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    145deg,
+    #4a3c2e 0%,
+    #3a2e22 100%
+  );
+  border: 2px solid #5a4a3a;
+  border-radius: 8px;
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.4),
+    0 2px 4px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.skillSlot:hover {
+  border-color: #8a7a5a;
+  background: linear-gradient(
+    145deg,
+    #5a4c3e 0%,
+    #4a3e32 100%
+  );
+  transform: scale(1.08);
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.3),
+    0 4px 12px rgba(0, 0, 0, 0.3),
+    0 0 12px rgba(212, 160, 74, 0.2);
+}
+
+.skillIcon {
+  font-size: 1.8rem;
+}
+
+/* Skill name label */
+.skillName {
+  font-size: 0.7rem;
+  color: #a08060;
+  text-align: center;
+  max-width: 70px;
+  line-height: 1.2;
+  font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+}
+
